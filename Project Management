@@ -1,0 +1,57 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from google.colab import files
+uploaded = files.upload()
+df = pd.read_csv('/content/Project Management Dataset.csv')
+print(df.head())
+
+print(df.head())
+print(df.tail())
+print(df.dtypes)
+
+print(df.isnull().sum())
+print(df.describe())
+
+sns.histplot(data=df,x=' Project Cost ',kde=True)
+plt.title('Distribution of Project Cost')
+plt.show()
+
+sns.countplot(data=df,x='Project Type')
+plt.xticks(rotation=45)
+plt.title('Project Count by Type')
+plt.show()
+
+sns.barplot(data=df,x='Department',y=' Project Cost ',estimator=np.mean)
+plt.xticks(rotation=45)
+plt.title('Average Cost by Department')
+plt.show()
+
+plt.pie(df['Status'].value_counts(),labels=df['Status'].value_counts().index,autopct='%1.1f%%')
+plt.title('Project Status Distribution')
+plt.show()
+
+sns.boxplot(data=df,x='Complexity',y='Completion%',showfliers=False)
+plt.title('Project Completion % by Complexity')
+plt.show()
+
+df[' Project Cost '] = df[' Project Cost '].str.replace(',', '').astype(float)
+df['Year-Month']=df['Year'].astype(str)+'-'+df['Month'].astype(str)
+df.groupby('Year-Month')[' Project Cost '].sum().plot()
+plt.title('Monthly Project Cost Over Time')
+plt.xticks(rotation=45)
+plt.show()
+
+sns.scatterplot(data=df,x=' Project Cost ',y=' Project Benefit ')
+plt.title('Project Cost vs Project Benefit')
+plt.show()
+
+from mpl_toolkits.mplot3d import Axes3D
+fig = plt.figure()
+ax = fig.add_subplot(111,projection='3d')
+ax.scatter(df[' Project Cost '],df[' Project Benefit '],df['Complexity'])
+ax.set_xlabel('Project Cost')
+ax.set_ylabel('Project Benefit')
+ax.set_zlabel('Complexity')
